@@ -22,10 +22,10 @@ Data Stack size         : 256
 *******************************************************/
 
 #include <mega16a.h>
-
+#include <stdio.h>
 #include <delay.h>
+#include <alcd.h>
 
-unsigned char pattern[8]={1,2,4,8,16,32,64,128};
 // Declare your global variables here
 
 void main(void)
@@ -33,6 +33,7 @@ void main(void)
 // Declare your local variables here
 int i=0,blink_cnt=0,auto_cnt=0;
 char pushed=0;
+unsigned char str[15];
 // Input/Output Ports initialization
 // Port A initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
@@ -136,19 +137,19 @@ SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<
 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 PORTA.0=1;
 PORTA.1=1;
-PORTC=~pattern[i];
+lcd_init(16);
 while (1)
       {
       // Place your code here
           if(pushed==0){
               if (PINA.0==0){
                i++;
-               if (i>=7)i=0;
+               if (i>=128)i=0;
                pushed=1;
               }
               if (PINA.1==0){
                i--;
-               if (i<0)i=6; 
+               if (i<0)i=127; 
                pushed=1;
               }
           }
@@ -158,11 +159,11 @@ while (1)
              if (auto_cnt==5){
                 if(PINA.0==0){
                   i++;
-                  if (i>=7)i=0;
+                  if (i>=128)i=0;
                 }
                 if(PINA.1==0){
                   i--;
-                  if (i<0)i=6;
+                  if (i<0)i=127;
                 }
              }
           }
@@ -170,12 +171,12 @@ while (1)
              pushed=0;
              auto_cnt=0;
           }
-          PORTC |= ~(1<<7);
-          PORTC &= ~pattern[i];
+          sprintf(str, "%3d    %c",i,i); 
+          lcd_clear();
+          lcd_puts(str);
           delay_ms(100);
           blink_cnt++;
           if(blink_cnt>2){
-             PORTC.7=PINC.7^1;
              blink_cnt=0;
           }  
       }
