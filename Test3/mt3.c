@@ -172,7 +172,7 @@ while (1)
              auto_cnt=0;
           }
           sprintf(str, "%3d    %c",i,i); 
-          lcd_clear();
+          lcd_gotoxy(0,0);
           lcd_puts(str);
           delay_ms(100);
           blink_cnt++;
