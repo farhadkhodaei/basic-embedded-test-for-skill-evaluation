@@ -31,7 +31,8 @@ Data Stack size         : 256
 void main(void)
 {
 // Declare your local variables here
-int i=0,blink_cnt=0,auto_cnt=0;
+char play[5][6]={">    ",">>   ",">>>  ",">>>> ",">>>>>"};
+int i=0,blink_cnt=0,auto_cnt=0, sch=0;
 char pushed=0;
 unsigned char str[15];
 // Input/Output Ports initialization
@@ -171,13 +172,16 @@ while (1)
              pushed=0;
              auto_cnt=0;
           }
-          sprintf(str, "%3d    %c",i,i); 
+          if (i!=0 && i!=10) sprintf(str, "%3d %c%s",i,i, play[sch]);
+          else sprintf(str, "%3d  %s",i, play[sch]);
           lcd_gotoxy(0,0);
           lcd_puts(str);
           delay_ms(100);
           blink_cnt++;
-          if(blink_cnt>2){
+          if(blink_cnt>=2){
              blink_cnt=0;
+             sch++;
+             if (sch>=5) sch=0; 
           }  
       }
 }
