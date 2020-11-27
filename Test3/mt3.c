@@ -26,6 +26,7 @@ Data Stack size         : 256
 #include <delay.h>
 #include <alcd.h>
 
+#define WAIT_TO_AUTO_CNT 10
 // Declare your global variables here
 
 void main(void)
@@ -156,8 +157,8 @@ while (1)
           }
           if (pushed==1 && (PINA.0==0 || PINA.1==0))
           {
-             if (auto_cnt<5)auto_cnt++;
-             if (auto_cnt==5){
+             if (auto_cnt<WAIT_TO_AUTO_CNT)auto_cnt++;
+             if (auto_cnt==WAIT_TO_AUTO_CNT){
                 if(PINA.0==0){
                   i++;
                   if (i>=128)i=0;
